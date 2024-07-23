@@ -7,6 +7,7 @@ using Random = System.Random;
 
 public class UI_MainMenu : MonoBehaviour
 {
+    // TODO - 데이터화
     private const int MIN_TIME = 3;
     private const int MAX_TIME = 15;
 

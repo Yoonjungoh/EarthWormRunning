@@ -8,10 +8,13 @@ public class IngameManager : MonoBehaviour
 
     public MyPlayerController MyPlayer;
 
+    private PlayerController _winner;
+
     private int _id;
 
     private List<Vector3> _playerSpawnPosList = new List<Vector3>();
-    Queue<Vector3> _playerSpawnPosQueue = new Queue<Vector3>();
+
+    private Queue<Vector3> _playerSpawnPosQueue = new Queue<Vector3>();
 
     public void Init(List<Vector3> playerSpawnPositionList)
     {
@@ -32,6 +35,7 @@ public class IngameManager : MonoBehaviour
             return;
 
         Vector3 spawnPos = _playerSpawnPosQueue.Dequeue();
+        // TODO - 따로 래핑한 리소스 매니저 사용
         GameObject myPlayerPrefab = Resources.Load<GameObject>("Prefabs/Creatures/MyPlayer");
         GameObject myPlayerObj = Instantiate(myPlayerPrefab, spawnPos, Quaternion.identity);
         MyPlayerController myPlayer = myPlayerObj.GetComponent<MyPlayerController>();
@@ -45,7 +49,7 @@ public class IngameManager : MonoBehaviour
 
     private void SpawnOtherPlayers()
     {
-
+        // TODO - 따로 래핑한 리소스 매니저 사용
         GameObject otherPlayerPrefab = Resources.Load<GameObject>("Prefabs/Creatures/OtherPlayer");
         for (int i = 0; i < 4; i++)
         {
@@ -68,16 +72,26 @@ public class IngameManager : MonoBehaviour
         return _id++;
     }
 
-    public void EndGame(PlayerController winPlayer)
+    public void EndGame(PlayerController winner)
     {
+        // 중복 우승자 방지
+        if (_winner != null)
+            return;
+
+        if (winner == null)
+            return;
+
+        _winner = winner;
+
         // TODO - UI 매니저 사용
         GameObject winnerUIPrefab = Resources.Load<GameObject>("Prefabs/UI/UI_Win");
         GameObject winnerUIObj = Instantiate(winnerUIPrefab);
         UI_Win winnerUI = winnerUIObj.GetComponent<UI_Win>();
-        winnerUI.ShowPop(winPlayer);
+        winnerUI.ShowPop(winner);
     }
 
 
+    // TODO - 따로 래핑한 매니저 사용
     #region 생성자
     public static IngameManager _instance = null;
 

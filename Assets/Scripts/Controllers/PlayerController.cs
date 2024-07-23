@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
         _initialScale = transform.localScale;
         _targetScale = _initialScale * 1.1f;
-        _scaleCoroutine = StartCoroutine(ScaleRoutine());
+        _scaleCoroutine = StartCoroutine(CoScaleRoutine());
     }
 
     protected virtual void OnUpdate()
@@ -52,23 +52,21 @@ public class PlayerController : MonoBehaviour
         if (_playerState != PlayerState.Move)
             return;
 
-        transform.position += Vector3.right * Time.deltaTime * _playerStat.MoveSpeed;
-
         // TODO - 애니메이션으로 수정
-
+        transform.position += Vector3.right * Time.deltaTime * _playerStat.MoveSpeed;
     }
 
-
-    IEnumerator ScaleRoutine()
+    // TODO - 애니메이션 들어오면 사라질 코드
+    IEnumerator CoScaleRoutine()
     {
         while (true)
         {
-            yield return StartCoroutine(ScaleTo(_targetScale));
-            yield return StartCoroutine(ScaleTo(_initialScale));
+            yield return StartCoroutine(CoScaleToTargetScale(_targetScale));
+            yield return StartCoroutine(CoScaleToTargetScale(_initialScale));
         }
     }
 
-    IEnumerator ScaleTo(Vector3 target)
+    IEnumerator CoScaleToTargetScale(Vector3 target)
     {
         Vector3 startScale = transform.localScale;
         float elapsedTime = 0f;
